@@ -1,0 +1,452 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Nguyễn Tuấn Kiệt</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Nguyễn Tuấn Kiệt – Backend Developer (Java Spring Boot, Node.js)">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+:root { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+body { margin: 0; }
+img { max-width: 100%; }
+
+/* Layout: sticky identity column (photo, contact, stack) beside a reading column laid out like a timeline of API "endpoints". */
+:root {
+  --bg: #f3f5f4;
+  --surface: #ffffff;
+  --ink: #15211d;
+  --muted: #5a6964;
+  --line: #d9e0dd;
+  --accent: #2446c7;
+  --accent-soft: #e6ebfb;
+  --ok: #1d7a4f;
+  --display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f1513; --surface: #161e1b; --ink: #e5ece9; --muted: #93a39d;
+    --line: #26322e; --accent: #8fa6ff; --accent-soft: #1c2647; --ok: #5fd39a;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0f1513; --surface: #161e1b; --ink: #e5ece9; --muted: #93a39d;
+  --line: #26322e; --accent: #8fa6ff; --accent-soft: #1c2647; --ok: #5fd39a;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--ink);
+  font: 400 16px/1.6 var(--body);
+  -webkit-font-smoothing: antialiased;
+}
+a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+a:hover { text-decoration-thickness: 2px; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+
+.wrap {
+  max-width: 1120px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 28px 64px;
+  display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: 56px;
+}
+
+/* Top bar */
+.topbar {
+  grid-column: 1 / -1;
+  display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap;
+  font: 500 13px/1 var(--mono); color: var(--muted);
+}
+.status { display: inline-flex; align-items: center; gap: 8px; }
+.status::before {
+  content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--ok);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--ok) 20%, transparent);
+}
+.lang { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; padding: 3px; background: var(--surface); }
+.lang button {
+  font: 500 12px/1 var(--mono); letter-spacing: .06em; color: var(--muted);
+  background: none; border: 0; padding: 7px 12px; border-radius: 999px; cursor: pointer;
+}
+.lang button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+
+/* Sidebar */
+aside { position: sticky; top: 24px; align-self: start; display: flex; flex-direction: column; gap: 28px; }
+.photo {
+  width: 120px; aspect-ratio: 244 / 324; max-width: 100%; object-fit: cover;
+  border-radius: 14px; border: 1px solid var(--line); background: var(--surface);
+}
+h1 {
+  font: 800 clamp(2.3rem, 5vw, 2.9rem)/0.98 var(--display); letter-spacing: -0.03em;
+  margin: 0; text-wrap: balance;
+}
+.role { margin: 10px 0 0; font: 500 14px/1.4 var(--mono); color: var(--accent); }
+.contact { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; font-size: 14.5px; }
+.contact li { display: grid; grid-template-columns: 64px minmax(0, 1fr) auto; gap: 8px; align-items: center; }
+.contact .k { font: 500 11px/1 var(--mono); text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
+.contact .v { overflow-wrap: anywhere; user-select: all; }
+.copy {
+  font: 500 11px/1 var(--mono); color: var(--muted); background: none;
+  border: 1px solid var(--line); border-radius: 6px; padding: 5px 7px; cursor: pointer;
+}
+.copy:hover { color: var(--ink); border-color: var(--muted); }
+.stack-title { font: 500 11px/1 var(--mono); text-transform: uppercase; letter-spacing: .1em; color: var(--muted); margin: 0 0 12px; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip {
+  font: 500 12.5px/1 var(--mono); padding: 7px 9px; border-radius: 6px;
+  background: var(--surface); border: 1px solid var(--line);
+}
+.chip.core { background: var(--accent-soft); border-color: transparent; color: var(--accent); }
+
+/* Main */
+main { display: flex; flex-direction: column; gap: 64px; min-width: 0; }
+.hero { display: flex; flex-direction: column; gap: 20px; }
+.hero p { margin: 0; font-size: clamp(1.15rem, 2.2vw, 1.4rem); line-height: 1.5; max-width: 34em; text-wrap: pretty; }
+.hero p b { font-weight: 600; }
+.request {
+  font: 400 13px/1.7 var(--mono); background: var(--surface); border: 1px solid var(--line);
+  border-radius: 10px; padding: 14px 16px; overflow-x: auto; white-space: pre; color: var(--muted);
+}
+.request .m { color: var(--ok); font-weight: 500; }
+.request .s { color: var(--accent); }
+.request .key { color: var(--ink); }
+
+section { display: flex; flex-direction: column; gap: 24px; }
+h2 {
+  margin: 0; display: flex; align-items: baseline; gap: 12px;
+  font: 700 1.6rem/1.1 var(--display); letter-spacing: -0.02em;
+}
+h2 .path { font: 400 13px/1 var(--mono); color: var(--muted); letter-spacing: 0; }
+
+.timeline { display: flex; flex-direction: column; gap: 0; }
+.item {
+  display: grid; grid-template-columns: 128px minmax(0, 1fr); gap: 24px;
+  padding-block: 22px; border-top: 1px solid var(--line);
+}
+.item:first-child { border-top: 0; padding-top: 0; }
+.when { font: 500 13px/1.5 var(--mono); color: var(--muted); font-variant-numeric: tabular-nums; padding-top: 3px; }
+.item h3 { margin: 0; font: 700 1.18rem/1.3 var(--display); letter-spacing: -0.01em; }
+.item .org { margin: 2px 0 0; font-weight: 500; color: var(--accent); font-size: 15px; }
+.item .desc { margin: 8px 0 0; color: var(--muted); font-style: italic; }
+.item ul { margin: 12px 0 0; padding-left: 18px; display: grid; gap: 6px; max-width: 65ch; }
+.item li::marker { color: var(--muted); }
+.item li b { font-weight: 600; }
+.tech { margin-top: 14px; display: flex; flex-wrap: wrap; gap: 6px; }
+.tech span { font: 400 12px/1 var(--mono); color: var(--muted); border: 1px solid var(--line); border-radius: 5px; padding: 5px 7px; }
+
+.skills { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px 32px; }
+.skill h4 { margin: 0 0 6px; font: 500 12px/1.3 var(--mono); text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
+.skill p { margin: 0; font-size: 15px; }
+
+.certs { list-style: none; margin: 0; padding: 0; display: grid; }
+.certs li {
+  display: grid; grid-template-columns: 128px minmax(0, 1fr); gap: 24px;
+  padding-block: 14px; border-top: 1px solid var(--line);
+}
+.certs li:first-child { border-top: 0; padding-top: 0; }
+.certs .t { font-weight: 500; }
+.certs .src { color: var(--muted); font-size: 14px; }
+
+.interests { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.interest { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px; }
+.interest h4 { margin: 0 0 6px; font: 700 1.05rem/1.2 var(--display); }
+.interest p { margin: 0; font-size: 14.5px; color: var(--muted); }
+.others { margin: 0; color: var(--muted); font-size: 15px; }
+.closing { margin: 0; max-width: 60ch; font-size: 17px; }
+
+footer { font: 400 12px/1.5 var(--mono); color: var(--muted); border-top: 1px solid var(--line); padding-top: 20px; }
+
+@media (max-width: 860px) {
+  .wrap { grid-template-columns: minmax(0, 1fr); gap: 40px; }
+  aside { position: static; }
+  .id { display: flex; gap: 18px; align-items: flex-end; }
+  .photo { width: 92px; }
+  .interests { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 560px) {
+  .item, .certs li { grid-template-columns: minmax(0, 1fr); gap: 6px; }
+  .skills { grid-template-columns: minmax(0, 1fr); }
+  main { gap: 52px; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  main > section, .hero { animation: rise .5s ease both; }
+  main > *:nth-child(2) { animation-delay: .05s; }
+  main > *:nth-child(3) { animation-delay: .1s; }
+  @keyframes rise { from { transform: translateY(8px); } to { transform: none; } }
+}
+
+.dl { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font: 500 12px/1 var(--mono); color: var(--muted); }
+.dl a { color: var(--ink); text-decoration: none; border: 1px solid var(--line); border-radius: 6px; padding: 8px 10px; background: var(--surface); }
+.dl a:hover { border-color: var(--accent); color: var(--accent); }
+</style>
+</head>
+<body>
+
+
+<div class="wrap">
+  <div class="topbar">
+    <span class="status" data-i="status"></span>
+    <div class="lang" role="group" aria-label="Language">
+      <button type="button" id="lang-vi" data-lang="vi" aria-pressed="true">VI</button>
+      <button type="button" id="lang-en" data-lang="en" aria-pressed="false">EN</button>
+    </div>
+  </div>
+
+  <aside>
+    <div class="id">
+      <img class="photo" src="data:image/jpeg;base64,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" alt="Nguyễn Tuấn Kiệt">
+      <div>
+        <h1>Nguyễn<br>Tuấn Kiệt</h1>
+        <p class="role" data-i="role"></p>
+      </div>
+    </div>
+    <ul class="contact">
+      <li><span class="k">Email</span><span class="v" id="email">kietnguyen23012002@gmail.com</span><button class="copy" type="button" data-copy="email" data-i="copy"></button></li>
+      <li><span class="k" data-i="phoneK"></span><span class="v" id="phone">0357 100 992</span><button class="copy" type="button" data-copy="phone" data-i="copy"></button></li>
+      <li><span class="k">GitHub</span><a class="v" href="https://github.com/KietNguyen2301" target="_blank" rel="noopener">KietNguyen2301</a><span></span></li>
+      <li><span class="k" data-i="addrK"></span><span class="v" data-i="addr"></span><span></span></li>
+    </ul>
+    <div class="dl">CV PDF
+      <a href="NguyenTuanKiet-CV-VN.pdf" download>Tiếng Việt ↓</a>
+      <a href="NguyenTuanKiet-CV-EN.pdf" download>English ↓</a>
+    </div>
+    <div>
+      <p class="stack-title" data-i="stackT"></p>
+      <div class="chips">
+        <span class="chip core">Java</span><span class="chip core">Spring Boot</span><span class="chip core">Node.js</span><span class="chip core">Express.js</span>
+        <span class="chip">MySQL</span><span class="chip">MongoDB</span><span class="chip">Prisma</span><span class="chip">JWT</span>
+        <span class="chip">PayOS</span><span class="chip">Nginx</span><span class="chip">Docker</span><span class="chip">GitHub Actions</span><span class="chip">ReactJS</span>
+      </div>
+    </div>
+  </aside>
+
+  <main id="main"></main>
+</div>
+
+<script>
+const T = {
+  vi: {
+    status: "Đang tìm vị trí Fresher / Junior Backend",
+    role: "Lập trình viên Backend",
+    phoneK: "Điện thoại", addrK: "Địa chỉ", addr: "Xã Thượng Đức, TP. Đà Nẵng",
+    copy: "Chép", copied: "Đã chép", stackT: "Công nghệ chính",
+    hero: "Lập trình viên Backend <b>Java Spring Boot</b> và <b>Node.js</b>, có kinh nghiệm thực tế xây dựng RESTful API, microservices và tích hợp thanh toán. Dùng Claude Code, Copilot và AI agent hằng ngày để làm nhanh hơn, và luôn review kỹ chất lượng, bảo mật của code do AI sinh ra.",
+    exp: "Kinh nghiệm", proj: "Dự án", edu: "Học vấn", skills: "Kỹ năng", certs: "Chứng chỉ", interests: "Sở thích", more: "Thêm về tôi",
+    techL: "Công nghệ",
+    footer: "Cập nhật 11/2026",
+  },
+  en: {
+    status: "Open to Fresher / Junior Backend roles",
+    role: "Backend Developer",
+    phoneK: "Phone", addrK: "Address", addr: "Thuong Duc commune, Da Nang city",
+    copy: "Copy", copied: "Copied", stackT: "Core stack",
+    hero: "Backend developer working with <b>Java Spring Boot</b> and <b>Node.js</b>, with hands-on experience building RESTful APIs, microservices and payment integrations. I use Claude Code, Copilot and AI agents daily to ship faster, and I review AI-generated code carefully for quality and security.",
+    exp: "Experience", proj: "Projects", edu: "Education", skills: "Skills", certs: "Certifications", interests: "Interests", more: "About me",
+    techL: "Tech",
+    footer: "Updated Nov 2026",
+  }
+};
+
+const EXP = [
+  { when: "04/2026 – 09/2026", org: "VNPT",
+    title: { vi: "Kỹ thuật viên Hạ tầng Mạng", en: "Network Infrastructure Technician" },
+    desc: { vi: "Triển khai hạ tầng mạng thực địa cho khách hàng hộ gia đình và doanh nghiệp.", en: "Field deployment of network infrastructure for household and business customers." },
+    pts: {
+      vi: [["Triển khai", "Lắp đặt, thi công hạ tầng cáp mạng tại địa điểm khách hàng theo tiêu chuẩn kỹ thuật của công ty."], ["Kết nối", "Kiểm tra đường truyền sau lắp đặt, đảm bảo dịch vụ ổn định trước khi bàn giao."], ["Kỹ năng mềm", "Làm việc trực tiếp với khách hàng và đội kỹ thuật; hoàn thành công việc hiện trường đúng tiến độ, an toàn."]],
+      en: [["Deployment", "Installed network cabling infrastructure at customer sites to company technical standards."], ["Connectivity", "Tested connections after installation to ensure stable service handover."], ["Soft skills", "Worked directly with customers and field teams; handled on-site tasks to schedule and safety requirements."]]
+    },
+    tech: ["Network cabling", "LAN", "Connection testing"] },
+  { when: "11/2025 – 03/2026", org: { vi: "Công ty Startup – Công nghệ Xây dựng", en: "Startup Company – Construction Technology" },
+    title: { vi: "Thực tập sinh Backend Developer (Node.js)", en: "Backend Developer Intern (Node.js)" },
+    desc: { vi: "Hệ thống quản lý nội bộ cho công ty công nghệ xây dựng.", en: "Internal management system for a construction-tech company." },
+    pts: {
+      vi: [["Phát triển API", "Xây dựng RESTful API bằng Node.js (Express.js) cho hệ thống quản lý nội bộ."], ["Thiết kế CSDL", "Thiết kế collection và cấu trúc dữ liệu MongoDB cho các chức năng chính."], ["Làm việc nhóm", "Phối hợp qua quy trình Git, xử lý merge conflict trong quá trình phát triển."]],
+      en: [["API development", "Built RESTful APIs with Node.js (Express.js) for the internal management system."], ["Database design", "Designed MongoDB collections and data structures for the system's core features."], ["Teamwork", "Collaborated through a Git workflow and resolved merge conflicts during development."]]
+    },
+    tech: ["Node.js", "Express.js", "MongoDB", "RESTful API", "Git"] },
+  { when: "05/2024 – 09/2024", org: "FPT Software",
+    title: { vi: "Thực tập sinh Web Developer (Java Spring Boot & ReactJS)", en: "Web Developer Intern (Java Spring Boot & ReactJS)" },
+    desc: { vi: "Phát triển ứng dụng web full-stack trong nhóm Agile/Scrum.", en: "Full-stack web application development in an Agile/Scrum team." },
+    pts: {
+      vi: [["Tính năng full-stack", "Phát triển tính năng web với Spring Boot (backend) và ReactJS (frontend)."], ["Tích hợp API", "Xây dựng RESTful API và kết nối với frontend."], ["Nghiệp vụ", "Triển khai logic nghiệp vụ phía backend theo kiến trúc MVC."], ["Chất lượng", "Kiểm thử, gỡ lỗi, bảo trì và nâng cấp các tính năng hiện có."]],
+      en: [["Full-stack features", "Developed web features with Spring Boot (backend) and ReactJS (frontend)."], ["API integration", "Built RESTful APIs and connected them to the frontend."], ["Business logic", "Implemented backend business logic following the MVC architecture."], ["Quality", "Tested, debugged, maintained and enhanced existing features."]]
+    },
+    tech: ["Java", "Spring Boot", "Spring MVC", "ReactJS", "RESTful API", "Git", "Agile/Scrum"] },
+];
+
+const PROJ = [
+  { when: "07/2026 – 09/2026",
+    title: { vi: "Web In ấn Online cho Sinh viên", en: "Online Printing Platform for Students" },
+    org: "Freelance Developer",
+    desc: { vi: "Nền tảng web cho sinh viên đặt in tài liệu online và thanh toán ngay trên web.", en: "Web platform where students order document printing online and pay on the site." },
+    pts: {
+      vi: [["Luồng đặt in", "Sinh viên tải tài liệu lên, chọn tùy chọn in và đặt đơn online."], ["Thanh toán", "Tích hợp thanh toán online, đơn hàng được thanh toán và xác nhận tự động."], ["Tích hợp phần cứng", "Kết nối hệ thống web với máy in để xử lý lệnh in từ đơn hàng online."], ["Làm việc với khách", "Làm việc trực tiếp với khách hàng từ khâu lấy yêu cầu đến triển khai."]],
+      en: [["Ordering flow", "Students upload documents, choose print options and place orders online."], ["Payments", "Integrated online payment so orders are paid and confirmed automatically."], ["Hardware integration", "Connected the web system to printers to process print jobs from online orders."], ["Delivery", "Worked directly with the client from requirements to deployment."]]
+    },
+    tech: ["Java", "Nginx", "PayOS API", "GitHub Actions"] },
+  { when: "05/2025 – 08/2025",
+    title: { vi: "CUSTOMERS – Nền tảng Bất động sản tích hợp AI", en: "CUSTOMERS – AI-integrated Real Estate Platform" },
+    org: "Backend Developer",
+    desc: { vi: "Nền tảng mua bán và quản lý bất động sản theo kiến trúc microservices.", en: "Real estate sales and management platform built on microservices." },
+    pts: {
+      vi: [["Xác thực", "Đăng ký/đăng nhập với JWT, bcrypt, xác thực OTP qua email và phân quyền người dùng."], ["Thanh toán", "Tích hợp PayOS API xử lý thanh toán hoa hồng cho môi giới, tăng minh bạch giao dịch."], ["Service chính", "Hệ thống đánh giá môi giới có duyệt, quản lý lịch hẹn và quản lý blog."], ["Thông báo", "Tự động gửi email (Nodemailer) cho nhiều quy trình nghiệp vụ."], ["Kiến trúc & DevOps", "Các microservice độc lập sau Nginx; CI/CD với GitHub Actions."]],
+      en: [["Authentication", "Registration/login with JWT, bcrypt, email OTP verification and role-based authorization."], ["Payments", "Integrated PayOS API for broker commission payments, improving transaction transparency."], ["Core services", "Broker review system with approval flow, appointment management and blog management."], ["Notifications", "Automated email notifications (Nodemailer) for multiple business workflows."], ["Architecture & DevOps", "Independent microservices behind Nginx; CI/CD with GitHub Actions."]]
+    },
+    tech: ["Node.js", "Express.js", "Prisma ORM", "MySQL", "JWT", "bcrypt", "Microservices", "Nginx", "PayOS API", "Nodemailer", "GitHub Actions"] },
+  { when: "12/2025",
+    title: { vi: "Landing Page theo Thiết kế Khách hàng", en: "Landing Pages for Clients" },
+    org: "Frontend Developer",
+    desc: { vi: "Các landing page dựng theo bản thiết kế khách hàng cung cấp.", en: "Landing pages built from client-provided designs." },
+    pts: {
+      vi: [["Thiết kế thành code", "Dựng landing page responsive bám sát bản thiết kế."], ["Animation với AI", "Dùng công cụ lập trình AI để triển khai nhanh animation và hiệu ứng tương tác."], ["Bàn giao", "Chỉnh sửa theo phản hồi của khách và bàn giao đúng tiến độ."]],
+      en: [["Design to code", "Converted client designs into responsive pages faithful to the original layout."], ["AI-assisted animation", "Used AI coding tools to implement the required animations and interactions quickly."], ["Client delivery", "Iterated on client feedback and delivered on schedule."]]
+    },
+    tech: ["HTML/CSS", "JavaScript", "AI coding tools"] },
+  { when: "01/2024 – 04/2024",
+    title: { vi: "Fruit Shop – Website Thương mại điện tử", en: "Fruit Shop – E-commerce Web Application" },
+    org: "Backend Developer",
+    pts: {
+      vi: [["Backend & API", "RESTful API và logic nghiệp vụ bằng Spring Boot theo kiến trúc MVC."], ["Cơ sở dữ liệu", "Thiết kế CSDL MySQL với ORM, tối ưu truy vấn đảm bảo toàn vẹn và hiệu năng."], ["Thanh toán", "Tích hợp cổng thanh toán PayOS cho thanh toán trực tuyến."], ["Phối hợp", "Làm việc với nhóm frontend ReactJS để tích hợp API."]],
+      en: [["Backend & API", "RESTful APIs and business logic with Spring Boot following MVC."], ["Database", "Designed the MySQL schema with ORM and optimized queries for integrity and performance."], ["Payments", "Integrated the PayOS payment gateway for online checkout."], ["Collaboration", "Worked with the ReactJS frontend team on API integration."]]
+    },
+    tech: ["Java", "Spring Boot", "Spring MVC", "ORM", "MySQL", "ReactJS", "PayOS"] },
+];
+
+const SKILLS = {
+  vi: [
+    ["Ngôn ngữ lập trình", "Java, JavaScript"],
+    ["Framework", "Spring Boot, Spring MVC, Spring IoC, Spring Data, Express.js, ReactJS"],
+    ["Backend", "RESTful API, Microservices, kiến trúc MVC, tích hợp API bên thứ ba, API thanh toán"],
+    ["Cơ sở dữ liệu", "MySQL, MongoDB, ORM, Prisma ORM, thiết kế CSDL, tối ưu truy vấn"],
+    ["Xác thực & Bảo mật", "JWT, Authentication, Authorization, OTP, bcrypt, bảo mật ứng dụng web"],
+    ["Kiểm thử", "Unit Testing, Integration Testing, Debugging, chất lượng mã nguồn"],
+    ["Công cụ & DevOps", "Git, Docker, Nginx, GitHub Actions (CI/CD)"],
+    ["Quy trình", "Agile/Scrum, Design Patterns, SDLC, viết tài liệu kỹ thuật"],
+    ["Công cụ AI", "Claude Code (có chứng chỉ), GitHub Copilot, Cursor, ChatGPT"],
+    ["Làm việc với AI", "Prompt cho AI coding agent (Openclaw), review & refactor với AI, sinh unit test, phân tích log, sinh tài liệu API"],
+    ["Tích hợp AI", "Tích hợp LLM API (OpenAI, Claude) vào backend, output JSON có cấu trúc, RAG & vector database cơ bản; kiểm tra code AI sinh ra về tính đúng và bảo mật"],
+    ["Kỹ năng chuyên môn", "Tư duy phân tích, giải quyết vấn đề, nắm bắt nhanh hệ thống có sẵn, học và áp dụng nhanh công nghệ mới"],
+  ],
+  en: [
+    ["Languages", "Java, JavaScript"],
+    ["Frameworks", "Spring Boot, Spring MVC, Spring IoC, Spring Data, Express.js, ReactJS"],
+    ["Backend", "RESTful APIs, Microservices, MVC architecture, third-party API integration, payment APIs"],
+    ["Databases", "MySQL, MongoDB, ORM, Prisma ORM, database design, query optimization"],
+    ["Auth & Security", "JWT, Authentication, Authorization, OTP, bcrypt, web application security"],
+    ["Testing", "Unit Testing, Integration Testing, Debugging, code quality"],
+    ["Tools & DevOps", "Git, Docker, Nginx, GitHub Actions (CI/CD)"],
+    ["Process", "Agile/Scrum, Design Patterns, SDLC, technical documentation"],
+    ["AI coding tools", "Claude Code (certified), GitHub Copilot, Cursor, ChatGPT"],
+    ["AI-assisted workflow", "Prompting AI coding agents (Openclaw), AI-assisted review & refactoring, unit test generation, log analysis, API docs generation"],
+    ["AI integration", "LLM APIs (OpenAI, Claude) in backend services, structured JSON output, basic RAG & vector databases; validating AI-generated code for correctness and security"],
+    ["Professional", "Analytical thinking, problem solving, quickly understanding existing systems, fast learner of new technology"],
+  ]
+};
+
+const CERTS = [
+  ["22/03/2026", "Claude Code – AI-Assisted Software Development", "Anthropic · Skilljar", "https://verify.skilljar.com/c/3bhr4cwchks6"],
+  ["03/11/2024", "Project Management", "Coursera", "https://www.coursera.org/account/accomplishments/certificate/R1GMCG6WEJU5"],
+  ["03/11/2024", "Project Change and Risk Management", "Coursera", "https://www.coursera.org/account/accomplishments/certificate/TKG1SXO57M69"],
+  ["03/11/2024", "Budgeting and Scheduling Projects", "Coursera", "https://www.coursera.org/account/accomplishments/certificate/3N4PY0EVZSNO"],
+  ["17/09/2024", "Initiating and Planning Projects", "Coursera", "https://www.coursera.org/account/accomplishments/certificate/0WYG5294A0CB"],
+];
+
+const INTERESTS = {
+  vi: [["AI", "Theo dõi các mô hình, công cụ và coding agent AI mới; thử nghiệm trong dự án cá nhân."], ["Self-hosting", "Tự dựng home server, cấu hình mạng LAN và triển khai các web tự phát triển."], ["Máy tính nhúng", "Vọc Raspberry Pi 4/5 để chạy dịch vụ tự host và làm dự án phần cứng nhỏ."]],
+  en: [["AI", "Following new AI models, tools and coding agents; trying them in personal projects."], ["Self-hosting", "Building home servers, setting up LAN networks and deploying my own web projects."], ["Single-board computers", "Tinkering with Raspberry Pi 4/5 for self-hosted services and small hardware projects."]],
+};
+const OTHERS = { vi: "Ngoài ra: bóng đá, guitar, du lịch.", en: "Also: soccer, guitar, traveling." };
+const CLOSING = {
+  vi: "Tôi hiểu công việc lập trình đòi hỏi sự tỉ mỉ, khả năng tối ưu mã nguồn và đáp ứng thời hạn nghiêm ngặt. Với tôi đó là cơ hội để thử thách bản thân, và tôi luôn giữ tinh thần học hỏi không ngừng.",
+  en: "Programming demands meticulousness, well-optimized code and strict deadlines. I see that as a chance to challenge myself, and I keep learning continuously.",
+};
+
+const esc = s => s.replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const pick = (v, l) => typeof v === "string" ? v : v[l];
+
+function item(x, l) {
+  return `<article class="item">
+    <div class="when">${x.when}</div>
+    <div>
+      <h3>${esc(pick(x.title, l))}</h3>
+      <p class="org">${esc(pick(x.org, l))}</p>
+      ${x.desc ? `<p class="desc">${esc(pick(x.desc, l))}</p>` : ""}
+      <ul>${x.pts[l].map(([k, v]) => `<li><b>${esc(k)}:</b> ${esc(v)}</li>`).join("")}</ul>
+      <div class="tech" aria-label="${T[l].techL}">${x.tech.map(t => `<span>${esc(t)}</span>`).join("")}</div>
+    </div>
+  </article>`;
+}
+
+function render(l) {
+  const t = T[l];
+  document.documentElement.lang = l;
+  document.querySelectorAll("[data-i]").forEach(el => { el.textContent = t[el.dataset.i]; });
+  document.querySelectorAll(".lang button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.lang === l)));
+  document.getElementById("main").innerHTML = `
+    <div class="hero">
+      <p>${t.hero}</p>
+      <div class="request" aria-hidden="true"><span class="m">GET</span> /api/kiet <span class="s">200 OK</span>
+{ <span class="key">"role"</span>: "Backend Developer", <span class="key">"stack"</span>: ["Spring Boot", "Node.js"],
+  <span class="key">"location"</span>: "Đà Nẵng", <span class="key">"openToWork"</span>: <span class="s">true</span> }</div>
+    </div>
+    <section>
+      <h2>${t.exp} <span class="path">/experience</span></h2>
+      <div class="timeline">${EXP.map(x => item(x, l)).join("")}</div>
+    </section>
+    <section>
+      <h2>${t.proj} <span class="path">/projects</span></h2>
+      <div class="timeline">${PROJ.map(x => item(x, l)).join("")}</div>
+    </section>
+    <section>
+      <h2>${t.edu} <span class="path">/education</span></h2>
+      <div class="timeline"><article class="item">
+        <div class="when">2020 – 2025</div>
+        <div><h3>${l === "vi" ? "Đại học FPT Đà Nẵng" : "FPT University Da Nang"}</h3>
+        <p class="org">${l === "vi" ? "Kỹ thuật Phần mềm · Đã tốt nghiệp" : "Software Engineering · Graduated"}</p></div>
+      </article></div>
+    </section>
+    <section>
+      <h2>${t.skills} <span class="path">/skills</span></h2>
+      <div class="skills">${SKILLS[l].map(([k, v]) => `<div class="skill"><h4>${esc(k)}</h4><p>${esc(v)}</p></div>`).join("")}</div>
+    </section>
+    <section>
+      <h2>${t.certs} <span class="path">/certifications</span></h2>
+      <ul class="certs">${CERTS.map(([d, n, s, u]) => `<li><span class="when">${d}</span><div><a class="t" href="${u}" target="_blank" rel="noopener">${esc(n)}</a><div class="src">${esc(s)}</div></div></li>`).join("")}</ul>
+    </section>
+    <section>
+      <h2>${t.interests} <span class="path">/interests</span></h2>
+      <div class="interests">${INTERESTS[l].map(([k, v]) => `<div class="interest"><h4>${esc(k)}</h4><p>${esc(v)}</p></div>`).join("")}</div>
+      <p class="others">${OTHERS[l]}</p>
+    </section>
+    <section>
+      <h2>${t.more}</h2>
+      <p class="closing">${CLOSING[l]}</p>
+    </section>
+    <footer>© Nguyễn Tuấn Kiệt · ${t.footer}</footer>`;
+  try { localStorage.setItem("cv-lang", l); } catch (e) {}
+}
+
+let lang = "vi";
+try { lang = localStorage.getItem("cv-lang") || "vi"; } catch (e) {}
+if (!T[lang]) lang = "vi";
+render(lang);
+
+document.querySelectorAll(".lang button").forEach(b => b.addEventListener("click", () => { lang = b.dataset.lang; render(lang); }));
+document.querySelectorAll(".copy").forEach(b => b.addEventListener("click", () => {
+  const el = document.getElementById(b.dataset.copy);
+  const done = () => { b.textContent = T[lang].copied; setTimeout(() => { b.textContent = T[lang].copy; }, 1500); };
+  const select = () => { const r = document.createRange(); r.selectNodeContents(el); const s = getSelection(); s.removeAllRanges(); s.addRange(r); };
+  try {
+    navigator.clipboard.writeText(el.textContent).then(done, select);
+  } catch (e) { select(); }
+}));
+</script>
+</body>
+</html>
